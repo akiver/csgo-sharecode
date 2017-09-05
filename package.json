@@ -1,11 +1,11 @@
 {
   "name": "csgo-sharecode",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Encode / decode CSGO share code",
   "main": "index.js",
   "author": {
-    "name" : "AkiVer",
-    "email" : "ys.renaud@gmail.com"
+    "name": "AkiVer",
+    "email": "ys.renaud@gmail.com"
   },
   "license": "GPL-2.0",
   "repository": {

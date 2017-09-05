@@ -1,0 +1,29 @@
+{
+  "name": "csgo-sharecode",
+  "version": "1.0.0",
+  "description": "Encode / decode CSGO share code",
+  "main": "index.js",
+  "author": {
+    "name" : "AkiVer",
+    "email" : "ys.renaud@gmail.com"
+  },
+  "license": "GPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akiver/csgo-sharecode.git"
+  },
+  "homepage": "http://github.com/akiver/csgo-sharecode",
+  "keywords": [
+    "csgo",
+    "valve",
+    "share code",
+    "replays",
+    "demos"
+  ],
+  "dependencies": {
+    "bignumber.js": "^4.0.4"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  }
+}

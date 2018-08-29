@@ -4,7 +4,9 @@ Node module to decode / encode the CSGO share codes used to share game replays b
 
 # Installation
 
-`npm install csgo-sharecode`
+`npm install csgo-sharecode` or `yarn install csgo-sharecode`
+
+TypeScript definitions provided.
 
 # Usage
 

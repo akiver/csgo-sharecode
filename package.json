@@ -1,8 +1,8 @@
 {
   "name": "csgo-sharecode",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Encode / decode CSGO share code",
-  "main": "index.js",
+  "main": "dist/index.js",
   "author": {
     "name": "AkiVer",
     "email": "ys.renaud@gmail.com"
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "https://github.com/akiver/csgo-sharecode.git"
   },
-  "homepage": "http://github.com/akiver/csgo-sharecode",
+  "homepage": "https://github.com/akiver/csgo-sharecode",
   "keywords": [
     "csgo",
     "valve",
@@ -20,10 +20,23 @@
     "replays",
     "demos"
   ],
+  "files": [
+    "dist",
+    "index.ts",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "build": "npx tsc",
+    "dev": "npx tsc --watch"
+  },
   "dependencies": {
-    "bignumber.js": "^4.0.4"
+    "bignumber.js": "^7.2.1"
   },
   "engines": {
     "node": ">=4.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^1.14.2",
+    "typescript": "^3.0.1"
   }
 }

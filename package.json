@@ -27,7 +27,8 @@
   ],
   "scripts": {
     "build": "npx tsc",
-    "dev": "npx tsc --watch"
+    "dev": "npx tsc --watch",
+    "prettier": "prettier --write \"{index,example}.{ts,js}\""
   },
   "dependencies": {
     "bignumber.js": "^8.0.0"

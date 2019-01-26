@@ -26,15 +26,19 @@ function bytesToHex(bytes: number[]) {
 }
 
 /**
- * Convert a hexadecimal string into a byte array
+ * Convert a BigNumber into a byte array.
  */
-function hexToBytes(str: string) {
-  let array = []
-  for (var i = 0, j = 0; i < str.length; i += 2, j++) {
-    array[j] = parseInt('0x' + str.substr(i, 2))
+function bigNumberToByteArray(big: BigNumber) {
+  let str = big.toString(16)
+  if (str.length % 2 > 0) {
+    str = '0' + str
+  }
+  const bytes = []
+  for (let i = 0; i < str.length; i += 2) {
+    bytes.push(parseInt(str.slice(i, i + 2), 16))
   }
 
-  return array
+  return bytes
 }
 
 /**
@@ -125,7 +129,7 @@ const decode = (shareCode: string): Sharecode => {
     big = big.multipliedBy(DICTIONARY_LENGTH).plus(DICTIONARY.indexOf(chars[i]))
   }
 
-  const bytes = hexToBytes(big.toString(16))
+  const bytes = bigNumberToByteArray(big)
 
   return {
     matchId: {

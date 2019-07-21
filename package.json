@@ -26,18 +26,18 @@
     "index.d.ts"
   ],
   "scripts": {
-    "build": "npx tsc",
-    "dev": "npx tsc --watch",
+    "build": "tsc",
+    "dev": "tsc --watch",
     "prettier": "prettier --write \"{index,example}.{ts,js}\""
   },
   "dependencies": {
-    "bignumber.js": "^8.0.0"
+    "bignumber.js": "^9.0.0"
   },
   "engines": {
     "node": ">=4.0.0"
   },
   "devDependencies": {
-    "prettier": "1.17.1",
-    "typescript": "3.4.5"
+    "prettier": "1.18.2",
+    "typescript": "3.5.3"
   }
 }

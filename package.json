@@ -28,7 +28,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "prettier": "prettier --write \"{index,example}.{ts,js}\""
+    "prettier": "prettier --write \"{index,example}.{ts,js}\"",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "bignumber.js": "^9.0.0"

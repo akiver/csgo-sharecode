@@ -29,10 +29,7 @@ function bytesToHex(bytes: number[]) {
  * Convert a BigNumber into a byte array.
  */
 function bigNumberToByteArray(big: BigNumber) {
-  let str = big.toString(16)
-  if (str.length % 2 > 0) {
-    str = '0' + str
-  }
+  const str = big.toString(16).padStart(36, '0')
   const bytes = []
   for (let i = 0; i < str.length; i += 2) {
     bytes.push(parseInt(str.slice(i, i + 2), 16))

@@ -1,4 +1,4 @@
-import { decode, encode } from '.'
+import { decode, encode } from '.';
 
 const samples = [
   {
@@ -49,18 +49,16 @@ const samples = [
       tvPort: 14119,
     },
   },
-]
+];
 
 it('should decode', () => {
   samples.forEach(({ string, value }) => {
-    expect(decode(string)).toEqual(value)
-  })
-})
+    expect(decode(string)).toEqual(value);
+  });
+});
 
 it('should encode', () => {
   samples.forEach(({ string, value }) => {
-    expect(encode(value.matchId, value.reservationId, value.tvPort)).toEqual(
-      string
-    )
-  })
-})
+    expect(encode(value.matchId, value.reservationId, value.tvPort)).toEqual(string);
+  });
+});

@@ -44,7 +44,7 @@
     "@types/node": "13.9.5",
     "jest": "25.2.3",
     "prettier": "2.0.2",
-    "ts-jest": "25.2.1",
+    "ts-jest": "25.5.1",
     "typescript": "3.8.3"
   }
 }

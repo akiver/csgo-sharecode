@@ -30,9 +30,9 @@ console.log(info);
 
 ## Encode
 
-Encode a [CDataGCCStrike15_v2_MatchInfo](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/csgo/cstrike15_gcmessages.proto#L773) message into a share code (string).  
-The object `match` used in the example below use values coming from a real *CDataGCCStrike15_v2_MatchInfo* message.  
-You should get it from the *Steam Game Coordinator* or from a *.info* file.
+Encode a [CDataGCCStrike15_v2_MatchInfo](https://github.com/SteamDatabase/Protobufs/blob/master/csgo/cstrike15_gcmessages.proto) (lookup for `CDataGCCStrike15_v2_MatchInfo`) message into a share code (string).  
+The object `match` used in the example below use values coming from a real _CDataGCCStrike15_v2_MatchInfo_ message.  
+You should get it from the _Steam Game Coordinator_ or from a _.info_ file.
 
 ```
 const ShareCode = require('csgo-sharecode');

@@ -4,9 +4,9 @@ Node module to decode / encode the CSGO share codes used to share game replays b
 
 # Installation
 
-`npm install csgo-sharecode` or `yarn install csgo-sharecode`
+`npm i csgo-sharecode` or `yarn add csgo-sharecode`
 
-TypeScript definitions provided.
+**Since the version 2, this module relies on native [BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt) which is available since Node 10.8.0. For Node < 10.8.0, please use the version 1.**
 
 # Usage
 
@@ -14,16 +14,16 @@ TypeScript definitions provided.
 
 Decode a share code from its string to an object.
 
-```
-const ShareCode = require('csgo-sharecode');
+```js
+const { decode } = require('csgo-sharecode');
 
 const shareCode = 'CSGO-GADqf-jjyJ8-cSP2r-smZRo-TO2xK';
-const info = ShareCode.decode(shareCode);
+const info = decode(shareCode);
 console.log(info);
 // output:
 // {
-//    matchId: { low: -2147483492, high: 752192506 },
-//    reservationId: { low: 143, high: 752193760 },
+//    matchId: 3230642215713767580n,
+//    reservationId: 3230647599455273103n,
 //    tvPort: 55788
 // }
 ```
@@ -34,23 +34,18 @@ Encode a [CDataGCCStrike15_v2_MatchInfo](https://github.com/SteamDatabase/Protob
 The object `match` used in the example below use values coming from a real _CDataGCCStrike15_v2_MatchInfo_ message.  
 You should get it from the _Steam Game Coordinator_ or from a _.info_ file.
 
-```
-const ShareCode = require('csgo-sharecode');
+```js
+const { encode } = require('csgo-sharecode');
 
 const match = {
-  matchId: {
-    high: 752192506,
-    low: -2147483492,
-  },
-  reservationId: {
-    high: 752193760,
-    low: 143,
-  },
+  matchId: BigInt('3230642215713767580'),
+  reservationId: BigInt('3230647599455273103'),
   tvPort: 599906796,
 };
 
-const code = ShareCode.encode(match.matchId, match.reservationId, match.tvPort);
-console.log(code); // output: "CSGO-GADqf-jjyJ8-cSP2r-smZRo-TO2xK"
+const shareCode = encode(match.matchId, match.reservationId, match.tvPort);
+console.log(shareCode);
+// output: "CSGO-GADqf-jjyJ8-cSP2r-smZRo-TO2xK"
 ```
 
 # License

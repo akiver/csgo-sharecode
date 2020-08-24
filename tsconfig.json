@@ -1,13 +1,12 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "lib": ["es5", "es6"],
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "outDir": "./dist",
     "sourceMap": true,
     "strict": true,
-    "target": "es5"
+    "removeComments": true
   },
   "files": ["index.ts"]
 }

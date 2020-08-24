@@ -1,6 +1,6 @@
 {
   "name": "csgo-sharecode",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Encode / decode CSGO share code",
   "main": "dist/index.js",
   "author": {

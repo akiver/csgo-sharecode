@@ -62,3 +62,26 @@ it('should encode', () => {
     expect(encode(value)).toEqual(string);
   });
 });
+
+describe('share code pattern detection', () => {
+  it('should detect a valid share code', () => {
+    const shareCode = 'CSGO-12345-12345-12345-12345-12345';
+    expect(() => {
+      decode(shareCode);
+    }).not.toThrow();
+  });
+
+  it('should throw an error if the share code pattern is invalid', () => {
+    const invalidShareCodes = [
+      'CSGO-12345-12345-12345-12345-1234',
+      'whateverCSGO-12345-12345-12345-12345-12345',
+      'CSGO-12345-12345-12345-12345-12345whatever',
+    ];
+
+    invalidShareCodes.forEach((shareCode) => {
+      expect(() => {
+        decode(shareCode);
+      }).toThrow();
+    });
+  });
+});

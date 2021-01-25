@@ -1,6 +1,6 @@
 const DICTIONARY = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdefhijkmnopqrstuvwxyz23456789';
 const DICTIONARY_LENGTH = BigInt(DICTIONARY.length);
-const SHARECODE_PATTERN = /CSGO(-?[\w]{5}){5}$/;
+const SHARECODE_PATTERN = /^CSGO(-?[\w]{5}){5}$/;
 
 export interface ShareCode {
   matchId: bigint;

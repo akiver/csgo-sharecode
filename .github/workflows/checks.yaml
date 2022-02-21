@@ -1,0 +1,31 @@
+name: Checks
+
+on:
+  push:
+    branches:
+      - '**'
+    paths-ignore:
+      - 'README.md'
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version-file: '.node-version'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: TSC compile
+        run: yarn tsc
+
+      - name: Test
+        run: yarn test

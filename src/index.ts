@@ -41,12 +41,14 @@ export interface Crosshair {
 export class InvalidShareCode extends Error {
   public constructor() {
     super('Invalid share code');
+    Object.setPrototypeOf(this, InvalidShareCode.prototype);
   }
 }
 
 export class InvalidCrosshairShareCode extends Error {
   public constructor() {
     super('Invalid crosshair share code');
+    Object.setPrototypeOf(this, InvalidCrosshairShareCode.prototype);
   }
 }
 

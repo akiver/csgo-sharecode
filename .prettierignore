@@ -1,6 +1,7 @@
 node_modules
 dist
-yarn.lock
+package-lock.json
 .*ignore
 __snapshots__
 LICENSE
+.node-version

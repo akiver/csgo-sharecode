@@ -22,6 +22,7 @@ export interface Crosshair {
   thickness: number;
   centerDotEnabled: boolean;
   splitDistance: number;
+  followRecoil: boolean; // CS2 only, always false with CS:GO
   fixedCrosshairGap: number;
   innerSplitAlpha: number;
   outerSplitAlpha: number;
@@ -29,11 +30,18 @@ export interface Crosshair {
   tStyleEnabled: boolean;
   deployedWeaponGapEnabled: boolean;
   /**
+   * CS:GO
    * 0 => Default
    * 1 => Default static
    * 2 => Classic
    * 3 => Classic dynamic
    * 4 => Classic static
+   */
+  /**
+   * CS2
+   * 0 to 3 => Classic
+   * 4 => Classic static
+   * 5 => Legacy
    */
   style: number;
 }
@@ -162,7 +170,8 @@ export function decodeCrosshairShareCode(shareCode: string): Crosshair {
     green: bytes[5],
     blue: bytes[6],
     alpha: bytes[7],
-    splitDistance: bytes[8],
+    splitDistance: bytes[8] & 7,
+    followRecoil: ((bytes[8] >> 4) & 8) === 8,
     fixedCrosshairGap: uint8ToInt8(bytes[9]) / 10,
     color: bytes[10] & 7,
     outlineEnabled: (bytes[10] & 8) === 8,
@@ -191,7 +200,7 @@ export function encodeCrosshair(crosshair: Crosshair): string {
     crosshair.green,
     crosshair.blue,
     crosshair.alpha,
-    crosshair.splitDistance,
+    (crosshair.splitDistance & 7) | (Number(crosshair.followRecoil) << 7),
     (crosshair.fixedCrosshairGap * 10) & 0xff,
     (crosshair.color & 7) | (Number(crosshair.outlineEnabled) << 3) | ((crosshair.innerSplitAlpha * 10) << 4),
     (crosshair.outerSplitAlpha * 10) | ((crosshair.splitSizeRatio * 10) << 4),
@@ -236,5 +245,6 @@ cl_crosshairstyle "${crosshair.style}"
 cl_crosshairthickness "${crosshair.thickness}"
 cl_crosshairusealpha "${Number(crosshair.alphaEnabled)}"
 cl_fixedcrosshairgap "${crosshair.fixedCrosshairGap}"
+cl_crosshair_recoil "${Number(crosshair.followRecoil)}"
 `;
 }

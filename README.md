@@ -1,6 +1,6 @@
 # csgo-sharecode
 
-JS module to decode / encode CSGO share codes used to share game replays/crosshairs between players.
+JS module to decode / encode CS:GO and CS2 share codes used to share game replays/crosshairs between players.
 
 # Installation
 
@@ -62,32 +62,33 @@ Decodes a crosshair share code into a `Crosshair` object.
 ```ts
 import { decodeCrosshairShareCode, Crosshair } from 'csgo-sharecode';
 
-const shareCode = 'CSGO-Cn37R-YE7vo-pLCAL-aURmZ-z6zkG';
+const shareCode = 'CSGO-WsnnD-eHaMw-QNDf9-oxuDh-ydOUD';
 const crosshair: Crosshair = decodeCrosshairShareCode(shareCode);
 console.log(crosshair);
 // output:
 //
 // {
-//   gap: -1.3,
-//   outline: 2,
-//   red: 175,
-//   green: 81,
-//   blue: 213,
-//   alpha: 137,
-//   splitDistance: 6,
+//   gap: -2.2,
+//   outline: 1,
+//   red: 50,
+//   green: 250,
+//   blue: 50,
+//   alpha: 200,
+//   splitDistance: 3,
+//   followRecoil: true,
 //   fixedCrosshairGap: 3,
-//   color: 5,
+//   color: 1,
 //   outlineEnabled: true,
-//   innerSplitAlpha: 0.6,
-//   outerSplitAlpha: 0.4,
-//   splitSizeRatio: 0.5,
-//   thickness: 1.2,
-//   centerDotEnabled: true,
+//   innerSplitAlpha: 0,
+//   outerSplitAlpha: 1,
+//   splitSizeRatio: 1,
+//   thickness: 0.6,
+//   centerDotEnabled: false,
 //   deployedWeaponGapEnabled: true,
 //   alphaEnabled: true,
-//   tStyleEnabled: true,
+//   tStyleEnabled: false,
 //   style: 2,
-//   length: 4.6
+//   length: 10
 // }
 ```
 
@@ -99,33 +100,34 @@ Encodes a `Crosshair` object into a crosshair share code.
 import { encodeCrosshair, Crosshair } from 'csgo-sharecode';
 
 const crosshair: Crosshair = {
-  gap: -1.3,
-  outline: 2,
-  red: 175,
-  green: 81,
-  blue: 213,
-  alpha: 137,
-  splitDistance: 6,
+  gap: -2.2,
+  outline: 1,
+  red: 50,
+  green: 250,
+  blue: 50,
+  alpha: 200,
+  splitDistance: 3,
   fixedCrosshairGap: 3,
-  color: 5,
-  innerSplitAlpha: 0.6,
+  color: 1,
+  innerSplitAlpha: 0,
   outlineEnabled: true,
-  outerSplitAlpha: 0.4,
-  splitSizeRatio: 0.5,
-  thickness: 1.2,
-  centerDotEnabled: true,
+  outerSplitAlpha: 1,
+  splitSizeRatio: 1,
+  thickness: 0.6,
+  centerDotEnabled: false,
   alphaEnabled: true,
-  tStyleEnabled: true,
+  tStyleEnabled: false,
   style: 2,
-  length: 4.6,
+  length: 10,
   deployedWeaponGapEnabled: true,
+  followRecoil: true,
 };
 
 const shareCode = encodeCrosshair(crosshair);
 console.log(shareCode);
 // output:
 //
-// "CSGO-Cn37R-YE7vo-pLCAL-aURmZ-z6zkG"
+// "CSGO-WsnnD-eHaMw-QNDf9-oxuDh-ydOUD"
 ```
 
 ### Generating CSGO ConVars
@@ -136,26 +138,27 @@ Utility function to generate CSGO ConVars for a given crosshair.
 import { crosshairToConVars, Crosshair } from 'csgo-sharecode';
 
 const crosshair: Crosshair = {
-  gap: -1.3,
-  outline: 2,
-  red: 175,
-  green: 81,
-  blue: 213,
-  alpha: 137,
-  splitDistance: 6,
+  gap: -2.2,
+  outline: 1,
+  red: 50,
+  green: 250,
+  blue: 50,
+  alpha: 200,
+  splitDistance: 3,
   fixedCrosshairGap: 3,
-  color: 5,
-  innerSplitAlpha: 0.6,
+  color: 1,
+  innerSplitAlpha: 0,
   outlineEnabled: true,
-  outerSplitAlpha: 0.4,
-  splitSizeRatio: 0.5,
-  thickness: 1.2,
-  centerDotEnabled: true,
+  outerSplitAlpha: 1,
+  splitSizeRatio: 1,
+  thickness: 0.6,
+  centerDotEnabled: false,
   alphaEnabled: true,
-  tStyleEnabled: true,
+  tStyleEnabled: false,
   style: 2,
-  length: 4.6,
+  length: 10,
   deployedWeaponGapEnabled: true,
+  followRecoil: true,
 };
 
 const conVars = crosshairToConVars(crosshair);
@@ -163,25 +166,26 @@ console.log(conVars);
 // Output:
 //
 // cl_crosshair_drawoutline "1"
-// cl_crosshair_dynamic_maxdist_splitratio "0.5"
-// cl_crosshair_dynamic_splitalpha_innermod "0.6"
-// cl_crosshair_dynamic_splitalpha_outermod "0.4"
-// cl_crosshair_dynamic_splitdist "6"
-// cl_crosshair_outlinethickness "2"
-// cl_crosshair_t "1"
-// cl_crosshairalpha "137"
-// cl_crosshaircolor "5"
-// cl_crosshaircolor_b "213"
-// cl_crosshaircolor_g "81"
-// cl_crosshaircolor_r "175"
-// cl_crosshairdot "1"
-// cl_crosshairgap "-1.3"
+// cl_crosshair_dynamic_maxdist_splitratio "1"
+// cl_crosshair_dynamic_splitalpha_innermod "0"
+// cl_crosshair_dynamic_splitalpha_outermod "1"
+// cl_crosshair_dynamic_splitdist "3"
+// cl_crosshair_outlinethickness "1"
+// cl_crosshair_t "0"
+// cl_crosshairalpha "200"
+// cl_crosshaircolor "1"
+// cl_crosshaircolor_b "50"
+// cl_crosshaircolor_g "250"
+// cl_crosshaircolor_r "50"
+// cl_crosshairdot "0"
+// cl_crosshairgap "-2.2"
 // cl_crosshairgap_useweaponvalue "1"
-// cl_crosshairsize "4.6"
+// cl_crosshairsize "10"
 // cl_crosshairstyle "2"
-// cl_crosshairthickness "1.2"
+// cl_crosshairthickness "0.6"
 // cl_crosshairusealpha "1"
 // cl_fixedcrosshairgap "3"
+// cl_crosshair_recoil "1"
 ```
 
 # License

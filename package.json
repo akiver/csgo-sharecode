@@ -38,7 +38,7 @@
     "src/index.ts"
   ],
   "scripts": {
-    "build:cjs": "tsc --module CommonJS --outDir dist/cjs && echo { \"type\": \"commonjs\" } > ./dist/cjs/package.json",
+    "build:cjs": "tsc --module CommonJS --outDir dist/cjs && echo { \"\\\"type\"\\\": \"\\\"commonjs\"\\\" } > ./dist/cjs/package.json",
     "build:esm": "tsc  --module NodeNext --outDir dist/esm",
     "build:types": "tsc --emitDeclarationOnly --declaration --removeComments false",
     "build": "npm run build:esm && npm run build:cjs && npm run build:types",

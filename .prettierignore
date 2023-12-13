@@ -5,3 +5,4 @@ package-lock.json
 __snapshots__
 LICENSE
 .node-version
+*.yaml

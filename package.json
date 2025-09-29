@@ -4,19 +4,7 @@
   "description": "Encode / decode CS:GO and CS2 share code",
   "type": "module",
   "types": "./dist/index.d.ts",
-  "main": "./dist/cjs/index.js",
-  "exports": {
-    ".": {
-      "import": {
-        "default": "./dist/esm/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "require": {
-        "default": "./dist/cjs/index.js",
-        "types": "./dist/index.d.ts"
-      }
-    }
-  },
+  "main": "./dist/index.js",
   "author": "AkiVer",
   "license": "GPL-2.0",
   "repository": {
@@ -27,6 +15,7 @@
   "keywords": [
     "csgo",
     "cs2",
+    "Counter-Strike",
     "valve",
     "share code",
     "replays",
@@ -38,10 +27,7 @@
     "src/index.ts"
   ],
   "scripts": {
-    "build:cjs": "tsc --module CommonJS --outDir dist/cjs && echo { \"\\\"type\"\\\": \"\\\"commonjs\"\\\" } > ./dist/cjs/package.json",
-    "build:esm": "tsc  --module NodeNext --outDir dist/esm",
-    "build:types": "tsc --emitDeclarationOnly --declaration --removeComments false",
-    "build": "npm run build:esm && npm run build:cjs && npm run build:types",
+    "build": "tsc",
     "compile": "tsc --noEmit",
     "dev": "tsc --watch",
     "format": "prettier --write \"**\"",
@@ -50,10 +36,10 @@
     "tw": "vitest --watch"
   },
   "devDependencies": {
-    "@types/node": "20.10.4",
-    "prettier": "3.1.1",
-    "typescript": "5.3.3",
-    "vitest": "1.0.4"
+    "@types/node": "24.6.0",
+    "prettier": "3.6.2",
+    "typescript": "5.9.2",
+    "vitest": "3.2.4"
   },
   "engines": {
     "node": ">=10.8.0"

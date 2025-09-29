@@ -190,4 +190,4 @@ console.log(conVars);
 
 # License
 
-[GPL v2](https://github.com/akiver/csgo-sharecode/blob/master/LICENSE)
+[MIT](https://github.com/akiver/csgo-sharecode/blob/master/LICENSE)

@@ -127,7 +127,7 @@ function bytesToShareCode(bytes: number[]) {
 
   return `CSGO-${chars.slice(0, 5)}-${chars.slice(5, 10)}-${chars.slice(10, 15)}-${chars.slice(15, 20)}-${chars.slice(
     20,
-    25
+    25,
   )}`;
 }
 

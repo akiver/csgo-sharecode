@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
     "module": "NodeNext",
-    "target": "esnext",
+    "target": "es2025",
+    "rootDir": "./src",
     "outDir": "dist",
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "sourceMap": true,
-    "strict": true,
     "removeComments": true,
     "esModuleInterop": true,
     "declaration": true

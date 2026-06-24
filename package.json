@@ -28,20 +28,32 @@
   ],
   "scripts": {
     "build": "tsc",
-    "compile": "tsc --noEmit",
     "dev": "tsc --watch",
     "format": "prettier --write \"**\"",
     "t": "npm run test",
     "test": "vitest run",
+    "typecheck": "tsc --noEmit",
     "tw": "vitest --watch"
   },
   "devDependencies": {
-    "@types/node": "24.6.0",
-    "prettier": "3.6.2",
-    "typescript": "5.9.2",
-    "vitest": "3.2.4"
+    "@types/node": "26.0.1",
+    "prettier": "3.8.4",
+    "typescript": "6.0.3",
+    "vitest": "4.1.9"
   },
   "engines": {
     "node": ">=10.8.0"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "npm",
+      "version": ">=11.0.0",
+      "onFail": "download"
+    },
+    "runtime": {
+      "name": "node",
+      "version": ">=24.18.0",
+      "onFail": "download"
+    }
   }
 }

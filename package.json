@@ -30,7 +30,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "format": "prettier --write \"**\"",
-    "t": "npm run test",
+    "t": "pnpm run test",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "tw": "vitest --watch"
@@ -46,13 +46,13 @@
   },
   "devEngines": {
     "packageManager": {
-      "name": "npm",
-      "version": ">=11.0.0",
+      "name": "pnpm",
+      "version": "11.10.0",
       "onFail": "download"
     },
     "runtime": {
       "name": "node",
-      "version": ">=24.18.0",
+      "version": "24.18.0",
       "onFail": "download"
     }
   }

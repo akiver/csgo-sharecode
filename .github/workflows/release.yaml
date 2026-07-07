@@ -39,29 +39,30 @@ jobs:
           fi
           exit 0
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+
       - name: Setup NodeJS
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
+          node-version-file: package.json
           registry-url: 'https://registry.npmjs.org'
           package-manager-cache: false
 
-      - name: Upgrade npm
-        run: npm install -g npm@11.17.0
-
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
 
       - name: Create new version
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          npm version ${{ github.event.inputs.release-type }} -m "chore: v%s"
+          pnpm version ${{ github.event.inputs.release-type }} --message "chore: v%s"
 
       - name: Build project
         run: |
-          npm run build
+          pnpm run build
 
       - name: Publish new version
         run: |
           git push --follow-tags
-          npm stage publish
+          pnpm stage publish

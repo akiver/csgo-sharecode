@@ -4,9 +4,9 @@ JS module to decode / encode CS:GO and CS2 share codes used to share game replay
 
 # Installation
 
-`npm install csgo-sharecode`
-
-**This module relies on [BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt), your target platform must support it!**
+```bash
+npm install csgo-sharecode
+```
 
 # Usage
 

@@ -5,7 +5,9 @@ import {
   decodeMatchShareCode,
   encodeMatch,
   InvalidCrosshairShareCode,
-  Crosshair,
+  CrosshairV1,
+  CrosshairV3,
+  CrosshairV4,
   decodeCrosshairShareCode,
   encodeCrosshair,
   crosshairToConVars,
@@ -91,10 +93,11 @@ describe('Match share code', () => {
 });
 
 describe('Crosshair share code', () => {
-  const crosshairSamples: Array<{ shareCode: string; crosshair: Crosshair }> = [
+  const crosshairV1Samples: Array<{ shareCode: string; crosshair: CrosshairV1 }> = [
     {
       shareCode: 'CSGO-Cn37R-YE7vo-pLCAL-aURmZ-z6zkG',
       crosshair: {
+        version: 1,
         gap: -1.3,
         outline: 2,
         red: 175,
@@ -121,6 +124,7 @@ describe('Crosshair share code', () => {
     {
       shareCode: 'CSGO-LibdP-VCVEd-ESayK-rSivi-2UBtG',
       crosshair: {
+        version: 1,
         gap: 1,
         outline: 1,
         red: 50,
@@ -147,6 +151,7 @@ describe('Crosshair share code', () => {
     {
       shareCode: 'CSGO-9JzcN-4dZtA-DdXis-8qz5T-rCnkP',
       crosshair: {
+        version: 1,
         gap: 1,
         outline: 1,
         red: 50,
@@ -173,6 +178,7 @@ describe('Crosshair share code', () => {
     {
       shareCode: 'CSGO-fCUBz-CBHss-a74RP-SEdO8-mvZpG',
       crosshair: {
+        version: 1,
         gap: 1,
         outline: 1,
         red: 50,
@@ -199,6 +205,7 @@ describe('Crosshair share code', () => {
     {
       shareCode: 'CSGO-WsnnD-eHaMw-QNDf9-oxuDh-ydOUD',
       crosshair: {
+        version: 1,
         gap: -2.2,
         outline: 1,
         red: 50,
@@ -225,6 +232,7 @@ describe('Crosshair share code', () => {
     {
       shareCode: 'CSGO-ZrEjo-yASEP-OAdce-Sf44w-rhK5O',
       crosshair: {
+        version: 1,
         gap: -1.2,
         outline: 1,
         red: 232,
@@ -249,6 +257,206 @@ describe('Crosshair share code', () => {
       },
     },
   ];
+
+  const crosshairV3Samples: Array<{ shareCode: string; crosshair: CrosshairV3 }> = [
+    {
+      shareCode: 'CSGO-MnUCC-89iG7-2cVar-wy7Yn-amCpF',
+      crosshair: {
+        version: 3,
+        style: 6,
+        followRecoil: false,
+        outlineEnabled: true,
+        centerDotEnabled: true,
+        tStyleEnabled: false,
+        red: 252,
+        green: 15,
+        blue: 192,
+        alpha: 255,
+        gap: 4,
+        length: 8,
+        thickness: 3,
+        dynamicSpreadLimit: 255,
+        splitDistance: 7,
+        innerSplitAlpha: 1,
+        outerSplitAlpha: 0.45,
+        splitSizeRatio: 0.3,
+        screenHeight: 1080,
+      },
+    },
+    {
+      shareCode: 'CSGO-tsJdC-2PFX6-fw8qD-6GDaX-rYCUM',
+      crosshair: {
+        version: 3,
+        style: 4,
+        followRecoil: false,
+        outlineEnabled: false,
+        centerDotEnabled: true,
+        tStyleEnabled: false,
+        red: 0,
+        green: 40,
+        blue: 255,
+        alpha: 255,
+        gap: 0,
+        length: 0,
+        thickness: 3,
+        dynamicSpreadLimit: 181,
+        splitDistance: 4,
+        innerSplitAlpha: 1,
+        outerSplitAlpha: 0.3,
+        splitSizeRatio: 0,
+        screenHeight: 768,
+      },
+    },
+    {
+      shareCode: 'CSGO-vcmKL-TWb8f-ddSDD-qM2Xx-T66VH',
+      crosshair: {
+        version: 3,
+        style: 4,
+        followRecoil: true,
+        outlineEnabled: true,
+        centerDotEnabled: true,
+        tStyleEnabled: false,
+        red: 172,
+        green: 14,
+        blue: 61,
+        alpha: 255,
+        gap: 0,
+        length: 4,
+        thickness: 5,
+        dynamicSpreadLimit: 255,
+        splitDistance: 3,
+        innerSplitAlpha: 0,
+        outerSplitAlpha: 1,
+        splitSizeRatio: 1,
+        screenHeight: 1080,
+      },
+    },
+    {
+      shareCode: 'CSGO-cA4U9-hiJwT-Wo9NA-YmTS8-WfH4C',
+      crosshair: {
+        version: 3,
+        style: 6,
+        followRecoil: false,
+        outlineEnabled: true,
+        centerDotEnabled: false,
+        tStyleEnabled: false,
+        red: 0,
+        green: 255,
+        blue: 14,
+        alpha: 255,
+        gap: 2,
+        length: 2,
+        thickness: 2,
+        dynamicSpreadLimit: 227,
+        splitDistance: 6,
+        innerSplitAlpha: 1,
+        outerSplitAlpha: 0.4,
+        splitSizeRatio: 0.3,
+        screenHeight: 960,
+      },
+    },
+    {
+      shareCode: 'CSGO-p4NqQ-mV2es-p2UF3-Q9HWe-fVmoE',
+      crosshair: {
+        version: 3,
+        style: 3,
+        followRecoil: false,
+        outlineEnabled: true,
+        centerDotEnabled: false,
+        tStyleEnabled: false,
+        red: 0,
+        green: 255,
+        blue: 0,
+        alpha: 255,
+        gap: 4,
+        length: 8,
+        thickness: 1,
+        dynamicSpreadLimit: 255,
+        splitDistance: 7,
+        innerSplitAlpha: 1,
+        outerSplitAlpha: 0.45,
+        splitSizeRatio: 0.3,
+        screenHeight: 1080,
+      },
+    },
+    {
+      shareCode: 'CSGO-hLbCn-69VT6-Bok83-9MOqW-SWzwQ',
+      crosshair: {
+        version: 3,
+        style: 4,
+        followRecoil: false,
+        outlineEnabled: false,
+        centerDotEnabled: false,
+        tStyleEnabled: false,
+        red: 50,
+        green: 250,
+        blue: 50,
+        alpha: 255,
+        gap: 4,
+        length: 8,
+        thickness: 2,
+        dynamicSpreadLimit: 255,
+        splitDistance: 7,
+        innerSplitAlpha: 1,
+        outerSplitAlpha: 0.4,
+        splitSizeRatio: 0.3,
+        screenHeight: 1080,
+      },
+    },
+  ];
+
+  const crosshairV4Samples: Array<{ shareCode: string; crosshair: CrosshairV4 }> = [
+    {
+      shareCode: 'CSGO-G8oAC-RyvWc-Hi3CZ-voSwn-QJbfE',
+      crosshair: {
+        version: 4,
+        style: 8,
+        followRecoil: false,
+        outlineMode: 1,
+        centerDotEnabled: true,
+        tStyleEnabled: false,
+        red: 124,
+        green: 57,
+        blue: 57,
+        alpha: 255,
+        gap: 25,
+        length: 7,
+        thickness: 20,
+        dynamicSpreadLimit: 181,
+        splitDistance: 3,
+        innerSplitAlpha: 1,
+        outerSplitAlpha: 0.35,
+        splitSizeRatio: 0,
+        screenHeight: 768,
+      },
+    },
+    {
+      shareCode: 'CSGO-sP6xU-TSyN9-sZcO5-2D48M-UppkP',
+      crosshair: {
+        version: 4,
+        style: 2,
+        followRecoil: true,
+        centerDotEnabled: true,
+        tStyleEnabled: false,
+        red: 255,
+        green: 0,
+        blue: 0,
+        alpha: 255,
+        gap: 0,
+        length: 5,
+        dynamicSpreadLimit: 255,
+        splitDistance: 3,
+        innerSplitAlpha: 1,
+        outerSplitAlpha: 0.3,
+        splitSizeRatio: 0,
+        thickness: 1,
+        screenHeight: 768,
+        outlineMode: 0,
+      },
+    },
+  ];
+
+  const crosshairSamples = [...crosshairV1Samples, ...crosshairV3Samples, ...crosshairV4Samples];
 
   it('should decode', () => {
     crosshairSamples.forEach(({ shareCode, crosshair }) => {
@@ -281,6 +489,8 @@ describe('Crosshair share code', () => {
       'CSGO-L9spZ-ihuov-cyhtE-kxbqa-FkBAA',
       'CSGO-12345-12345-12345-12345-12345',
       'CSGO-11111-22222-33333-44444-55555',
+      // Valid checksum but unknown version (2)
+      'CSGO-eRqP8-AkrwM-3Wsqh-pKDTh-eAPtQ',
     ];
 
     invalidCrosshairCodes.forEach((shareCode) => {

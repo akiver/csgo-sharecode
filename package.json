@@ -36,10 +36,10 @@
     "tw": "vitest --watch"
   },
   "devDependencies": {
-    "@types/node": "26.0.1",
-    "prettier": "3.8.4",
-    "typescript": "6.0.3",
-    "vitest": "4.1.9"
+    "@types/node": "24.13.6",
+    "prettier": "3.9.9",
+    "typescript": "7.0.2",
+    "vitest": "5.0.1"
   },
   "engines": {
     "node": ">=10.8.0"
@@ -47,12 +47,12 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "11.10.0",
+      "version": "12.6.0",
       "onFail": "download"
     },
     "runtime": {
       "name": "node",
-      "version": "24.18.0",
+      "version": "24.21.0",
       "onFail": "download"
     }
   }

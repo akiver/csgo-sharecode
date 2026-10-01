@@ -63,9 +63,15 @@ The crosshair share code format has changed over time, the `version` property of
 | `2`     | Not supported | Never released | -           |
 | `3`     | `CrosshairV3` | 23/09/2026     | 1.41.8.2    |
 | `4`     | `CrosshairV4` | 24/09/2026     | 1.41.8.3    |
+| `5`     | `CrosshairV5` | 30/09/2026     | 1.41.8.8    |
 
 - `CrosshairV3`: Sizes (`gap`, `length`, `thickness`...) are integers expressed in pixels at the screen height the crosshair was created for, the `screenHeight` property is used to scale the crosshair to the current screen height.
 - `CrosshairV4`: Same as v3 with `outlineMode` (none, full or half outline) instead of `outlineEnabled` and the Static Square style.
+- `CrosshairV5`: Adds the outline color (`outlineRed`, `outlineGreen`, `outlineBlue`, `outlineAlpha`), the scope dot preferences (`scopeDotScale` from 0.1 to 2, `scopeDotUseCrosshairColor`) and the Static Quad style. `gap` may now be negative and the split alphas use 0.01 steps instead of 0.05.
+
+> [!IMPORTANT]
+> Unlike the previous versions, v5 codes are neither prefixed with `CSGO` nor dash separated, they look like `CSvbPubOq37zTGqtsPTP5QTrp5CB4xFXiKRLfzJsm49ZRe`.
+> The version byte of a v5 code is `1`, but since the CS:GO era codes already use the version `1`, this library exposes it as the version `5` to keep the `version` property unambiguous.
 
 ### Decoding
 
@@ -74,31 +80,37 @@ Decodes a crosshair share code into a `Crosshair` object.
 ```ts
 import { decodeCrosshairShareCode, Crosshair } from 'csgo-sharecode';
 
-const shareCode = 'CSGO-sP6xU-TSyN9-sZcO5-2D48M-UppkP';
+const shareCode = 'CSvbPubOq37zTGqtsPTP5QTrp5CB4xFXiKRLfzJsm49ZRe';
 const crosshair: Crosshair = decodeCrosshairShareCode(shareCode);
 console.log(crosshair);
 // output:
 //
 // {
-//   version: 4,
+//   version: 5,
 //   style: 2,
-//   followRecoil: true,
+//   followRecoil: false,
 //   centerDotEnabled: true,
 //   tStyleEnabled: false,
+//   outlineMode: 0,
 //   red: 255,
 //   green: 0,
 //   blue: 0,
 //   alpha: 255,
+//   outlineRed: 0,
+//   outlineGreen: 0,
+//   outlineBlue: 0,
+//   outlineAlpha: 255,
 //   gap: 0,
 //   length: 5,
-//   dynamicSpreadLimit: 255,
+//   thickness: 1,
+//   dynamicSpreadLimit: 181,
 //   splitDistance: 3,
 //   innerSplitAlpha: 1,
-//   outerSplitAlpha: 0.3,
+//   outerSplitAlpha: 0.35,
 //   splitSizeRatio: 0,
-//   thickness: 1,
 //   screenHeight: 768,
-//   outlineMode: 0
+//   scopeDotScale: 1,
+//   scopeDotUseCrosshairColor: false
 // }
 ```
 
@@ -107,35 +119,41 @@ console.log(crosshair);
 Encodes a `Crosshair` object into a crosshair share code, the code version matches the `version` property.
 
 ```ts
-import { encodeCrosshair, CrosshairV4 } from 'csgo-sharecode';
+import { encodeCrosshair, CrosshairV5 } from 'csgo-sharecode';
 
-const crosshair: CrosshairV4 = {
-  version: 4,
+const crosshair: CrosshairV5 = {
+  version: 5,
   style: 2,
-  followRecoil: true,
+  followRecoil: false,
   centerDotEnabled: true,
   tStyleEnabled: false,
+  outlineMode: 0,
   red: 255,
   green: 0,
   blue: 0,
   alpha: 255,
+  outlineRed: 0,
+  outlineGreen: 0,
+  outlineBlue: 0,
+  outlineAlpha: 255,
   gap: 0,
   length: 5,
-  dynamicSpreadLimit: 255,
+  thickness: 1,
+  dynamicSpreadLimit: 181,
   splitDistance: 3,
   innerSplitAlpha: 1,
-  outerSplitAlpha: 0.3,
+  outerSplitAlpha: 0.35,
   splitSizeRatio: 0,
-  thickness: 1,
   screenHeight: 768,
-  outlineMode: 0,
+  scopeDotScale: 1,
+  scopeDotUseCrosshairColor: false,
 };
 
 const shareCode = encodeCrosshair(crosshair);
 console.log(shareCode);
 // output:
 //
-// "CSGO-sP6xU-TSyN9-sZcO5-2D48M-UppkP"
+// "CSvbPubOq37zTGqtsPTP5QTrp5CB4xFXiKRLfzJsm49ZRe"
 ```
 
 ### Generating ConVars
@@ -145,26 +163,32 @@ Utility function to generate the ConVars for a given crosshair. ConVar names dep
 ```ts
 import { crosshairToConVars } from 'csgo-sharecode';
 
-const crosshair: CrosshairV4 = {
-  version: 4,
+const crosshair: CrosshairV5 = {
+  version: 5,
   style: 2,
-  followRecoil: true,
+  followRecoil: false,
   centerDotEnabled: true,
   tStyleEnabled: false,
+  outlineMode: 0,
   red: 255,
   green: 0,
   blue: 0,
   alpha: 255,
+  outlineRed: 0,
+  outlineGreen: 0,
+  outlineBlue: 0,
+  outlineAlpha: 255,
   gap: 0,
   length: 5,
-  dynamicSpreadLimit: 255,
+  thickness: 1,
+  dynamicSpreadLimit: 181,
   splitDistance: 3,
   innerSplitAlpha: 1,
-  outerSplitAlpha: 0.3,
+  outerSplitAlpha: 0.35,
   splitSizeRatio: 0,
-  thickness: 1,
   screenHeight: 768,
-  outlineMode: 0,
+  scopeDotScale: 1,
+  scopeDotUseCrosshairColor: false,
 };
 const conVars = crosshairToConVars(crosshair);
 console.log(conVars);
@@ -173,12 +197,12 @@ console.log(conVars);
 // cl_crosshair_drawoutline "0"
 // cl_crosshair_dynamic_maxdist_splitratio "0"
 // cl_crosshair_dynamic_splitalpha_innermod "1"
-// cl_crosshair_dynamic_splitalpha_outermod "0.3"
+// cl_crosshair_dynamic_splitalpha_outermod "0.35"
 // cl_crosshair_dynamic_splitdist "3"
-// cl_crosshair_dynamic_spread_limit "255"
+// cl_crosshair_dynamic_spread_limit "181"
 // cl_crosshair_gap "0"
 // cl_crosshair_length "5"
-// cl_crosshair_recoil "1"
+// cl_crosshair_recoil "0"
 // cl_crosshair_screen_height "768"
 // cl_crosshair_t "0"
 // cl_crosshair_thickness "1"
@@ -187,7 +211,13 @@ console.log(conVars);
 // cl_crosshaircolor_g "0"
 // cl_crosshaircolor_r "255"
 // cl_crosshairdot "1"
+// cl_crosshairoutline_a "255"
+// cl_crosshairoutline_b "0"
+// cl_crosshairoutline_g "0"
+// cl_crosshairoutline_r "0"
 // cl_crosshairstyle "2"
+// cl_ironsight_dot_scale "1"
+// cl_ironsight_usecrosshaircolor "0"
 ```
 
 # License

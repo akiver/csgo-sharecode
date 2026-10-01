@@ -73,6 +73,8 @@ The crosshair share code format has changed over time, the `version` property of
 > Unlike the previous versions, v5 codes are neither prefixed with `CSGO` nor dash separated, they look like `CSvbPubOq37zTGqtsPTP5QTrp5CB4xFXiKRLfzJsm49ZRe`.
 > The version byte of a v5 code is `1`, but since the CS:GO era codes already use the version `1`, this library exposes it as the version `5` to keep the `version` property unambiguous.
 
+See [doc/code_layout.md](doc/code_layout.md) for the byte by byte layout of every format.
+
 ### Decoding
 
 Decodes a crosshair share code into a `Crosshair` object.

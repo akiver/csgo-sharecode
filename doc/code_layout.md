@@ -14,11 +14,11 @@ Five of the 62 alphanumeric characters are missing, which brings the base down t
 
 The integer is written **least significant character first**, so decoding reverses the characters before accumulating them. The resulting number is then read as a **big-endian** byte array, which means the byte 0 is the most significant one and the trailing unused bytes are the least significant ones.
 
-| Format             | Prefix | Separators  | Characters | Bytes |
-| ------------------ | ------ | ----------- | ---------- | ----- |
-| Match              | `CSGO` | `-` every 5 | 25         | 18    |
-| Crosshair v1/v3/v4 | `CSGO` | `-` every 5 | 25         | 18    |
-| Crosshair v5       | `CS`   | none        | 44         | 32    |
+| Format                      | Prefix | Separators  | Characters | Bytes |
+| --------------------------- | ------ | ----------- | ---------- | ----- |
+| Match                       | `CSGO` | `-` every 5 | 25         | 18    |
+| Crosshair `legacy-v1/v3/v4` | `CSGO` | `-` every 5 | 25         | 18    |
+| Crosshair `cs2-v1`          | `CS`   | none        | 44         | 32    |
 
 Every **crosshair** code stores a checksum in the byte 0:
 
@@ -30,14 +30,14 @@ Match codes have no checksum, their byte 0 is payload.
 
 ## Telling the formats apart
 
-1. A code matching `^CS<44 dictionary characters>$` is a crosshair v5 code.
-2. Otherwise the code must match `^CSGO(-?[\w]{5}){5}$`, and the byte 1 holds the version.
+1. A code matching `^CS<44 dictionary characters>$` uses the cs2 container, and the byte 1 holds its version.
+2. Otherwise the code must match `^CSGO(-?[\w]{5}){5}$`, and the byte 1 holds the legacy container version.
 
-The byte 1 of a v5 code is `1`, the same value the CS:GO era codes use. The two never collide because they are told apart by the prefix and the length, but it is why this library exposes the new format as the version `5` instead: it keeps the `version` property of the `Crosshair` union unambiguous.
+Each container numbers its own versions from 1, so the byte 1 alone is not enough: a `legacy-v1` code and a `cs2-v1` code both store `1`. The container has to be resolved first, which is why this library names the formats `<container>-v<version byte>` instead of using a single number. The `legacy` container is closed, any new format will be a `cs2-vX`.
 
-There is no version `2`. CS2 went straight from the version 1 to the version 3 with the 23/09/2026 update, and the client rejects any code whose version is `2` or lower.
+There is no `legacy-v2`. CS2 went straight from the version 1 to the version 3 with the 23/09/2026 update, and the client rejects any code whose version is `2` or lower.
 
-## Crosshair v1
+## Crosshair `legacy-v1`
 
 CS:GO era and CS2 below 1.41.8.2. 18 bytes. Sizes are stored as tenths, so a gap of `-3.5` is stored as `-35`.
 
@@ -70,7 +70,7 @@ CS:GO era and CS2 below 1.41.8.2. 18 bytes. Sizes are stored as tenths, so a gap
 | 14      | 0-7  | `length`                   | 0.1 steps                       |
 | 15 - 17 | all  | unused                     |                                 |
 
-## Crosshair v3
+## Crosshair `legacy-v3`
 
 CS2 1.41.8.2 (23/09/2026). 18 bytes. Sizes became whole pixels authored at `screenHeight`, which consumers use to scale the crosshair to the current resolution.
 
@@ -103,9 +103,9 @@ The bytes 10 to 13 are a **little-endian** bit field, so the bit 0 is the least 
 
 `outerSplitAlpha` ranges from 0.3 to 1 and the stored value is the number of 0.05 steps **above** 0.3, so `0.35` is stored as `1`.
 
-## Crosshair v4
+## Crosshair `legacy-v4`
 
-CS2 1.41.8.3 (24/09/2026). 18 bytes. Identical to the v3 except for the two rows marked below: the outline flag became a 3 state mode and the Static Square style was added.
+CS2 1.41.8.3 (24/09/2026). 18 bytes. Identical to the `legacy-v3` except for the two rows marked below: the outline flag became a 3 state mode and the Static Square style was added.
 
 | Byte    | Bits  | Property             | Encoding                    |
 | ------- | ----- | -------------------- | --------------------------- |
@@ -133,7 +133,7 @@ CS2 1.41.8.3 (24/09/2026). 18 bytes. Identical to the v3 except for the two rows
 | 14 - 15 | 0-15  | `screenHeight`       | uint16                      |
 | 16 - 17 | all   | unused               |                             |
 
-## Crosshair v5
+## Crosshair `cs2-v1`
 
 CS2 1.41.8.8 (30/09/2026). **32 bytes**, and the code is neither prefixed with `CSGO` nor dash separated:
 
@@ -144,7 +144,7 @@ CSvbPubOq37zTGqtsPTP5QTrp5CB4xFXiKRLfzJsm49ZRe
 | Byte    | Bits  | Property                    | Encoding                    |
 | ------- | ----- | --------------------------- | --------------------------- |
 | 0       | 0-7   | checksum                    | `sum(bytes[1..]) % 256`     |
-| 1       | 0-7   | version                     | always `1`, see above       |
+| 1       | 0-7   | version                     | always `1`, per container   |
 | 2 - 3   | 0-15  | `screenHeight`              | uint16                      |
 | 4       | 0-3   | `style`                     | 0 to 9                      |
 |         | 4     | `followRecoil`              |                             |
@@ -173,10 +173,10 @@ CSvbPubOq37zTGqtsPTP5QTrp5CB4xFXiKRLfzJsm49ZRe
 | 22      | 0-7   | `scopeDotScale`             | 0.01 steps, plus 0.1        |
 | 23 - 31 | all   | unused                      |                             |
 
-### What changed from the v4
+### What changed from the `legacy-v4`
 
 - The outline color was added as a full RGBA quad in the bytes 9 to 12.
-- The scope dot preferences were added: `scopeDotScale` in the byte 22 and `scopeDotUseCrosshairColor` at the bit 28 of the bit field, the slot the v4 used for `outlineMode`.
+- The scope dot preferences were added: `scopeDotScale` in the byte 22 and `scopeDotUseCrosshairColor` at the bit 28 of the bit field, the slot `legacy-v4` used for `outlineMode`.
 - `outlineMode` moved out of the bit field into its own byte 14.
 - `thickness` moved out of the bit field into its own byte 13, widening it from 5 bits to 8.
 - The split alphas went from 0.05 to 0.01 steps, so they need 7 bits each instead of 5 and 4.
@@ -195,7 +195,7 @@ CSvbPubOq37zTGqtsPTP5QTrp5CB4xFXiKRLfzJsm49ZRe
 | 90      | 1                        |
 | 255     | 2 (clamped)              |
 
-`outerSplitAlpha` keeps the v3 convention: it ranges from 0.3 to 1 and the stored value is the number of 0.01 steps above 0.3, so `0.35` is stored as `5`.
+`outerSplitAlpha` keeps the `legacy-v3` convention: it ranges from 0.3 to 1 and the stored value is the number of 0.01 steps above 0.3, so `0.35` is stored as `5`.
 
 The styles are, per the `cl_crosshairstyle` ConVar help text: 0 Dynamic Cross, 1 Dynamic Circle, 2 Dynamic Cross (Legacy), 3 Static Circle, 4 Static Cross, 5 Static Cross (Shot Feedback), 6 Dot Only, 7 Dynamic Quad, 8 Static Square, 9 Static Quad.
 

@@ -55,23 +55,24 @@ console.log(shareCode);
 
 ## Crosshair
 
-The crosshair share code format has changed over time, the `version` property of the `Crosshair` object indicates which version the code is.
+The crosshair share code format has changed over time, the `format` property of the `Crosshair` object indicates which layout the code uses. It is named `<container>-v<version byte>`.
 
-| Version | Type          | Release date   | CS2 version |
-| ------- | ------------- | -------------- | ----------- |
-| `1`     | `CrosshairV1` | CS:GO era      | < 1.41.8.2  |
-| `2`     | Not supported | Never released | -           |
-| `3`     | `CrosshairV3` | 23/09/2026     | 1.41.8.2    |
-| `4`     | `CrosshairV4` | 24/09/2026     | 1.41.8.3    |
-| `5`     | `CrosshairV5` | 30/09/2026     | 1.41.8.8    |
+| Format      | Type                | Release date   | CS2 version |
+| ----------- | ------------------- | -------------- | ----------- |
+| `legacy-v1` | `CrosshairLegacyV1` | CS:GO era      | < 1.41.8.2  |
+| -           | Not supported       | Never released | -           |
+| `legacy-v3` | `CrosshairLegacyV3` | 23/09/2026     | 1.41.8.2    |
+| `legacy-v4` | `CrosshairLegacyV4` | 24/09/2026     | 1.41.8.3    |
+| `cs2-v1`    | `CrosshairV1`       | 30/09/2026     | 1.41.8.8    |
 
-- `CrosshairV3`: Sizes (`gap`, `length`, `thickness`...) are integers expressed in pixels at the screen height the crosshair was created for, the `screenHeight` property is used to scale the crosshair to the current screen height.
-- `CrosshairV4`: Same as v3 with `outlineMode` (none, full or half outline) instead of `outlineEnabled` and the Static Square style.
-- `CrosshairV5`: Adds the outline color (`outlineRed`, `outlineGreen`, `outlineBlue`, `outlineAlpha`), the scope dot preferences (`scopeDotScale` from 0.1 to 2, `scopeDotUseCrosshairColor`) and the Static Quad style. `gap` may now be negative and the split alphas use 0.01 steps instead of 0.05.
+- `CrosshairLegacyV3`: Sizes (`gap`, `length`, `thickness`...) are integers expressed in pixels at the screen height the crosshair was created for, the `screenHeight` property is used to scale the crosshair to the current screen height.
+- `CrosshairLegacyV4`: Same as `legacy-v3` with `outlineMode` (none, full or half outline) instead of `outlineEnabled` and the Static Square style.
+- `CrosshairV1`: Adds the outline color (`outlineRed`, `outlineGreen`, `outlineBlue`, `outlineAlpha`), the scope dot preferences (`scopeDotScale` from 0.1 to 2, `scopeDotUseCrosshairColor`) and the Static Quad style. `gap` may now be negative and the split alphas use 0.01 steps instead of 0.05.
 
 > [!IMPORTANT]
-> Unlike the previous versions, v5 codes are neither prefixed with `CSGO` nor dash separated, they look like `CSvbPubOq37zTGqtsPTP5QTrp5CB4xFXiKRLfzJsm49ZRe`.
-> The version byte of a v5 code is `1`, but since the CS:GO era codes already use the version `1`, this library exposes it as the version `5` to keep the `version` property unambiguous.
+> There are two containers. `legacy` is the `CSGO-xxxxx-xxxxx-xxxxx-xxxxx-xxxxx` code, which CS2 no longer accepts on import. `cs2` is the code CS2 produces today: prefixed with `CS`, not dash separated, and it looks like `CSvbPubOq37zTGqtsPTP5QTrp5CB4xFXiKRLfzJsm49ZRe`. Note that `legacy-v3` and `legacy-v4` are CS2 era formats, they simply kept the old container.
+>
+> Each container numbers its own versions from 1, which is why the format is a string and not a number: a `legacy-v1` code and a `cs2-v1` code both store the version byte `1`. There is no `legacy-v2`, CS2 went straight from the version 1 to the version 3 and the client rejects any code below the version 3. The `legacy` container is closed, any new format will be a `cs2-vX`.
 
 See [doc/code_layout.md](doc/code_layout.md) for the byte by byte layout of every format.
 
@@ -88,7 +89,7 @@ console.log(crosshair);
 // output:
 //
 // {
-//   version: 5,
+//   format: 'cs2-v1',
 //   style: 2,
 //   followRecoil: false,
 //   centerDotEnabled: true,
@@ -118,13 +119,13 @@ console.log(crosshair);
 
 ### Encoding
 
-Encodes a `Crosshair` object into a crosshair share code, the code version matches the `version` property.
+Encodes a `Crosshair` object into a crosshair share code, the produced code matches the `format` property.
 
 ```ts
-import { encodeCrosshair, CrosshairV5 } from 'csgo-sharecode';
+import { encodeCrosshair, CrosshairV1 } from 'csgo-sharecode';
 
-const crosshair: CrosshairV5 = {
-  version: 5,
+const crosshair: CrosshairV1 = {
+  format: 'cs2-v1',
   style: 2,
   followRecoil: false,
   centerDotEnabled: true,
@@ -160,13 +161,13 @@ console.log(shareCode);
 
 ### Generating ConVars
 
-Utility function to generate the ConVars for a given crosshair. ConVar names depend on the crosshair version.
+Utility function to generate the ConVars for a given crosshair. ConVar names depend on the crosshair format.
 
 ```ts
 import { crosshairToConVars } from 'csgo-sharecode';
 
-const crosshair: CrosshairV5 = {
-  version: 5,
+const crosshair: CrosshairV1 = {
+  format: 'cs2-v1',
   style: 2,
   followRecoil: false,
   centerDotEnabled: true,

@@ -18,6 +18,9 @@ const invalidShareCodes = [
   'CSGO-12345-12345-12345-12345-1234',
   'whateverCSGO-12345-12345-12345-12345-12345',
   'CSGO-12345-12345-12345-12345-12345whatever',
+  // Characters outside the base 57 dictionary (0, 1, I, g, l and _ are excluded)
+  'CSGO-12345-12345-12345-12345-12345',
+  'CSGO-11111-22222-33333-44444-55555',
 ];
 
 describe('Match share code', () => {
@@ -621,8 +624,6 @@ describe('Crosshair share code', () => {
   it('should throw an error if the crosshair share code is invalid', () => {
     const invalidCrosshairCodes = [
       'CSGO-L9spZ-ihuov-cyhtE-kxbqa-FkBAA',
-      'CSGO-12345-12345-12345-12345-12345',
-      'CSGO-11111-22222-33333-44444-55555',
       // Valid checksum but unknown version (2)
       'CSGO-eRqP8-AkrwM-3Wsqh-pKDTh-eAPtQ',
       // cs2 container code with a valid checksum but an unknown version byte (2)

@@ -47,10 +47,10 @@
     "prepublishOnly": "pnpm run typecheck && pnpm run test && pnpm run build"
   },
   "devDependencies": {
-    "@types/node": "24.13.6",
+    "@types/node": "24.19.1",
     "prettier": "3.9.9",
     "typescript": "7.0.2",
-    "vitest": "5.0.1"
+    "vitest": "5.0.3"
   },
   "engines": {
     "node": ">=20.19.0"
@@ -58,7 +58,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "12.6.0",
+      "version": "12.8.1",
       "onFail": "download"
     },
     "runtime": {

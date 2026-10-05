@@ -106,18 +106,34 @@ const SCOPE_DOT_SCALE_MIN_STEPS = 10; // 0.1 * 100 = 10
 const SCOPE_DOT_SCALE_MIN = 0.1;
 const SCOPE_DOT_SCALE_MAX = 2;
 
+// CS2 sanitizes an imported code before applying it: it rejects a screen height of 0, raises it to at least 240
+// and caps every other field to the range of its ConVar. Decoding mirrors it to return what the game applies.
+const SCREEN_HEIGHT_MIN = 240;
+const STYLE_MAX = 9;
+const THICKNESS_MAX = 32;
+const OUTLINE_MODE_MAX = 2;
+const GAP_MIN = -3840;
+const GAP_MAX = 3840;
+const SPLIT_STEPS_MAX = 100; // 1 * 100
+const OUTER_SPLIT_ALPHA_STEPS_MAX = 70; // (1 - 0.3) * 100
+
 function decodeCrosshairV1(bytes: number[]): CrosshairV1 {
+  const screenHeight = bytes[2] | (bytes[3] << 8);
+  if (screenHeight === 0) {
+    throw new InvalidCrosshairShareCode();
+  }
+
   // Bytes 18 to 21 are a little-endian bit field of four 7 bits values followed by the scope dot
   // color flag at the bit 28 - bits 29 to 31 are unused.
   const bits = bytes[18] | (bytes[19] << 8) | (bytes[20] << 16) | (bytes[21] << 24);
 
   return {
     format: 'cs2-v1',
-    style: bytes[4] & 0x1f,
+    style: Math.min(bytes[4] & 0x1f, STYLE_MAX),
     followRecoil: (bytes[4] & 0x20) === 0x20,
     centerDotEnabled: (bytes[4] & 0x40) === 0x40,
     tStyleEnabled: (bytes[4] & 0x80) === 0x80,
-    outlineMode: bytes[13] >>> 6,
+    outlineMode: Math.min(bytes[13] >>> 6, OUTLINE_MODE_MAX),
     red: bytes[5],
     green: bytes[6],
     blue: bytes[7],
@@ -126,15 +142,16 @@ function decodeCrosshairV1(bytes: number[]): CrosshairV1 {
     outlineGreen: bytes[10],
     outlineBlue: bytes[11],
     outlineAlpha: bytes[12],
-    gap: ((bytes[14] | (bytes[15] << 8)) << 16) >> 16,
+    gap: clamp(((bytes[14] | (bytes[15] << 8)) << 16) >> 16, GAP_MIN, GAP_MAX),
     length: bytes[16],
-    thickness: bytes[13] & 0x3f,
+    thickness: Math.min(bytes[13] & 0x3f, THICKNESS_MAX),
     dynamicSpreadLimit: bytes[17],
     splitDistance: bits & 0x7f,
-    innerSplitAlpha: ((bits >> 7) & 0x7f) / STEPS_PER_UNIT,
-    outerSplitAlpha: (((bits >> 14) & 0x7f) + OUTER_SPLIT_ALPHA_MIN_STEPS) / STEPS_PER_UNIT,
-    splitSizeRatio: ((bits >> 21) & 0x7f) / STEPS_PER_UNIT,
-    screenHeight: bytes[2] | (bytes[3] << 8),
+    innerSplitAlpha: Math.min((bits >> 7) & 0x7f, SPLIT_STEPS_MAX) / STEPS_PER_UNIT,
+    outerSplitAlpha:
+      (Math.min((bits >> 14) & 0x7f, OUTER_SPLIT_ALPHA_STEPS_MAX) + OUTER_SPLIT_ALPHA_MIN_STEPS) / STEPS_PER_UNIT,
+    splitSizeRatio: Math.min((bits >> 21) & 0x7f, SPLIT_STEPS_MAX) / STEPS_PER_UNIT,
+    screenHeight: Math.max(screenHeight, SCREEN_HEIGHT_MIN),
     scopeDotScale: Math.min((bytes[22] + SCOPE_DOT_SCALE_MIN_STEPS) / STEPS_PER_UNIT, SCOPE_DOT_SCALE_MAX),
     scopeDotUseCrosshairColor: ((bits >>> 28) & 1) === 1,
   };

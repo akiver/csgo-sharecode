@@ -630,6 +630,8 @@ describe('Crosshair share code', () => {
       'CSuZhVyU8icUwjTjopBSVi6ctEbq5GiOXJBRdC6LNLKaFL',
       // cs2 container code with an invalid checksum
       'CSkSCHQKunGr2yPsJr2U3RTd8ycMA2pEs9jWnxK5KjMmWL',
+      // cs2 container code with a screen height of 0, CS2 rejects it
+      'CSoQhciXBHZUKAbfexZBeMWFKxkrXL5MLumDLj3JYW4snP',
     ];
 
     invalidCrosshairCodes.forEach((shareCode) => {
@@ -637,5 +639,43 @@ describe('Crosshair share code', () => {
         decodeCrosshairShareCode(shareCode);
       }).toThrow(new InvalidCrosshairShareCode());
     });
+  });
+
+  it('should clamp out of range cs2 values like CS2 does', () => {
+    // Crafted code, every field holds the largest value its bits allow, the screen height is 100 and the gap -32768.
+    expect(decodeCrosshairShareCode('CS7uw3wMkJBJ4rMDLEaYbyfTJFFPvkLAhOmBFi8zOM6H2d')).toEqual({
+      format: 'cs2-v1',
+      style: 9,
+      followRecoil: false,
+      centerDotEnabled: false,
+      tStyleEnabled: false,
+      outlineMode: 2,
+      red: 1,
+      green: 2,
+      blue: 3,
+      alpha: 4,
+      outlineRed: 5,
+      outlineGreen: 6,
+      outlineBlue: 7,
+      outlineAlpha: 8,
+      gap: -3840,
+      length: 9,
+      thickness: 32,
+      dynamicSpreadLimit: 10,
+      splitDistance: 5,
+      innerSplitAlpha: 1,
+      outerSplitAlpha: 1,
+      splitSizeRatio: 1,
+      screenHeight: 240,
+      scopeDotScale: 2,
+      scopeDotUseCrosshairColor: false,
+    } satisfies CrosshairV1);
+    // Same code with a gap of 32767.
+    expect(decodeCrosshairShareCode('CSDfPcMpj4e9NRxx6SGiVoFCHzYRYGmb34WHpbYHy6E6id')).toMatchObject({ gap: 3840 });
+  });
+
+  it('should round trip a gap outside of the settings UI range', () => {
+    const crosshair = { ...crosshairV1Samples[0].crosshair, gap: -3000 };
+    expect(decodeCrosshairShareCode(encodeCrosshair(crosshair))).toEqual(crosshair);
   });
 });

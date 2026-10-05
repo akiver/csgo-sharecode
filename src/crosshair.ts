@@ -7,7 +7,6 @@ import {
   DICTIONARY,
   InvalidCrosshairShareCode,
   sumArray,
-  uint8ToInt8,
 } from './share-code.js';
 
 /**
@@ -48,9 +47,9 @@ export interface CrosshairV1 extends CrosshairWithFormat<'cs2-v1'> {
   outlineGreen: number; // 0 to 255
   outlineBlue: number; // 0 to 255
   outlineAlpha: number; // 0 to 255
-  gap: number; // -128 to 127, negative values are allowed since the 30/09/2026 update
+  gap: number; // -3840 to 3840, stored as a signed 16-bit integer
   length: number; // 0 to 255
-  thickness: number; // 0 to 255
+  thickness: number; // 0 to 32
   dynamicSpreadLimit: number; // 0 to 255
   splitDistance: number; // 0 to 127
   innerSplitAlpha: number; // 0 to 1, 0.01 steps
@@ -114,12 +113,11 @@ function decodeCrosshairV1(bytes: number[]): CrosshairV1 {
 
   return {
     format: 'cs2-v1',
-    style: bytes[4] & 0xf,
-    followRecoil: (bytes[4] & 0x10) === 0x10,
-    // The bit 5 of the byte 4 is unused, it held the outline flag of the legacy-v3 codes.
+    style: bytes[4] & 0x1f,
+    followRecoil: (bytes[4] & 0x20) === 0x20,
     centerDotEnabled: (bytes[4] & 0x40) === 0x40,
     tStyleEnabled: (bytes[4] & 0x80) === 0x80,
-    outlineMode: bytes[14],
+    outlineMode: bytes[13] >>> 6,
     red: bytes[5],
     green: bytes[6],
     blue: bytes[7],
@@ -128,9 +126,9 @@ function decodeCrosshairV1(bytes: number[]): CrosshairV1 {
     outlineGreen: bytes[10],
     outlineBlue: bytes[11],
     outlineAlpha: bytes[12],
-    gap: uint8ToInt8(bytes[15]),
+    gap: ((bytes[14] | (bytes[15] << 8)) << 16) >> 16,
     length: bytes[16],
-    thickness: bytes[13],
+    thickness: bytes[13] & 0x3f,
     dynamicSpreadLimit: bytes[17],
     splitDistance: bits & 0x7f,
     innerSplitAlpha: ((bits >> 7) & 0x7f) / STEPS_PER_UNIT,
@@ -165,7 +163,7 @@ function crosshairV1ToBytes(crosshair: CrosshairV1): number[] {
   bytes[3] = screenHeight >> 8;
   bytes[4] =
     clamp(crosshair.style, 0, 9) |
-    (Number(crosshair.followRecoil) << 4) |
+    (Number(crosshair.followRecoil) << 5) |
     (Number(crosshair.centerDotEnabled) << 6) |
     (Number(crosshair.tStyleEnabled) << 7);
   bytes[5] = clamp(crosshair.red, 0, 255);
@@ -176,9 +174,10 @@ function crosshairV1ToBytes(crosshair: CrosshairV1): number[] {
   bytes[10] = clamp(crosshair.outlineGreen, 0, 255);
   bytes[11] = clamp(crosshair.outlineBlue, 0, 255);
   bytes[12] = clamp(crosshair.outlineAlpha, 0, 255);
-  bytes[13] = clamp(crosshair.thickness, 0, 255);
-  bytes[14] = clamp(crosshair.outlineMode, 0, 2);
-  bytes[15] = clamp(crosshair.gap, -128, 127) & 0xff;
+  bytes[13] = clamp(crosshair.thickness, 0, 32) | (clamp(crosshair.outlineMode, 0, 2) << 6);
+  const gap = clamp(crosshair.gap, -3840, 3840);
+  bytes[14] = gap & 0xff;
+  bytes[15] = (gap >> 8) & 0xff;
   bytes[16] = clamp(crosshair.length, 0, 255);
   bytes[17] = clamp(crosshair.dynamicSpreadLimit, 0, 255);
   bytes[18] = bits & 0xff;
